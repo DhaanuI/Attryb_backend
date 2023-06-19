@@ -42,6 +42,19 @@ inventoryRoute.get("/", async (req, res) => {
     }
 });
 
+inventoryRoute.get("/:id", async (req, res) => {
+    const id = req.params.id
+    try {
+        const data = await Marketplace_Inventory.find({ _id: id }).populate('oemId userID');
+        res.status(200).send(data);
+
+    } catch (err) {
+        console.log(err);
+        res.status(500).send({ "Message": "Error in getting all Second Hand Cars" });
+    }
+});
+
+
 // authentication is applied for posting / updating and deleting a data
 inventoryRoute.use(authenticate)
 
