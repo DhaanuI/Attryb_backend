@@ -60,6 +60,20 @@ oemRoute.post("/add", async (req, res) => {
     }
 })
 
+oemRoute.get('/oemmodels', async (req, res) => {
+    try {
+        // Group and count the OEM models
+        const modelCounts = await OEM_Specs.aggregate([
+            { $group: { _id: '$modelName', count: { $sum: 1 } } },
+            { $project: { _id: 0, modelName: '$_id', count: 1 } },
+        ]);
+
+        res.json(modelCounts);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Internal server error' });
+    }
+});
 
 
 
